@@ -1,38 +1,39 @@
-```html
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>OIIA Game</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Launcher</title>
 
   <style>
     html, body {
       margin: 0;
-      width: 100%;
-      height: 100%;
+      min-height: 100%;
       background: #111;
       color: white;
       font-family: Arial, sans-serif;
     }
 
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      place-items: center;
     }
 
     #login {
+      width: min(330px, calc(100% - 40px));
       text-align: center;
     }
 
     h1 {
-      margin-bottom: 20px;
+      margin: 0 0 20px;
     }
 
     input {
-      width: 260px;
+      width: 100%;
+      box-sizing: border-box;
       padding: 12px;
       font-size: 16px;
-      border: none;
+      border: 0;
       border-radius: 6px;
       outline: none;
     }
@@ -42,34 +43,31 @@
       padding: 12px 25px;
       font-size: 16px;
       cursor: pointer;
-      border: none;
+      border: 0;
       border-radius: 6px;
     }
 
     #error {
-      color: #ff5555;
-      margin-top: 12px;
       display: none;
+      margin-top: 12px;
+      color: #ff5555;
     }
   </style>
 </head>
 
 <body>
-
   <div id="login">
     <h1>Enter Password</h1>
 
     <input
-      type="password"
       id="password"
+      type="password"
       placeholder="Password"
       autocomplete="off"
     >
 
-    <br>
-
-    <button onclick="checkPassword()">
-      Enter
+    <button id="enterButton" type="button">
+      Open launcher
     </button>
 
     <div id="error">
@@ -80,70 +78,266 @@
   <script>
     const PASSWORD = "OIIA_IS_GOD";
 
-    function checkPassword() {
-      const entered = document.getElementById("password").value;
-
-      if (entered === PASSWORD) {
-        openGame();
-      } else {
-        document.getElementById("error").style.display = "block";
+    const GAMES = [
+      {
+        name: "Ragdoll Archers",
+        url: "https://www.crazygames.com/embed/ragdoll-archers"
+      },
+      {
+        name: "OvO",
+        url: "https://dedragames.com/games/ovo/1.4.5/index.html"
+      },
+      {
+        name: "Derby Cars Arena",
+        url: "https://unblocked-games.s3.amazonaws.com/derby-cars-arena.html"
+      },
+      {
+        name: "Agent Smith",
+        url: "https://unblocked-games.s3.amazonaws.com/agent-smith.html"
+      },
+      {
+        name: "Moto X3M",
+        url: "https://motox3m2.io/"
+      },
+      {
+        name: "Moto X3M 2",
+        url: "https://motox3m2.io/moto-x3m-2"
+      },
+      {
+        name: "Moto X3M Spooky Land",
+        url: "https://motox3m2.io/moto-x3m-spooky-land"
+      },
+      {
+        name: "Moto X3M 4 Winter",
+        url: "https://motox3m2.io/moto-x3m-4-winter"
+      },
+      {
+        name: "Moto X3M Pool Party",
+        url: "https://motox3m2.io/moto-x3m-pool-party"
+      },
+      {
+        name: "Moto X3M 3",
+        url: "https://motox3m2.io/moto-x3m-3"
+      },
+      {
+        name: "Drift Boss",
+        url: "https://motox3m2.io/drift-boss"
       }
-    }
+    ];
 
-    document.getElementById("password").addEventListener("keydown", function(event) {
+    const passwordInput = document.getElementById("password");
+    const errorBox = document.getElementById("error");
+    const enterButton = document.getElementById("enterButton");
+
+    enterButton.addEventListener("click", checkPassword);
+
+    passwordInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         checkPassword();
       }
     });
 
-    function openGame() {
-      const win = window.open("about:blank", "_blank");
-
-      if (!win) {
-        alert("Please allow pop-ups for this site.");
+    function checkPassword() {
+      if (passwordInput.value !== PASSWORD) {
+        errorBox.style.display = "block";
         return;
       }
 
-      win.document.open();
+      errorBox.style.display = "none";
+      openGameLauncher();
+    }
 
-      win.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Game</title>
+    function openGameLauncher() {
+      const gameTab = window.open("about:blank", "_blank");
 
-          <style>
-            html, body {
-              margin: 0;
-              width: 100%;
-              height: 100%;
-              overflow: hidden;
-              background: #000;
-            }
+      if (!gameTab) {
+        alert("Please allow pop-ups for this page, then try again.");
+        return;
+      }
 
-            iframe {
-              width: 100%;
-              height: 100%;
-              border: 0;
-            }
-          </style>
-        </head>
+      gameTab.document.open();
+      gameTab.document.write(makeLauncherPage());
+      gameTab.document.close();
+    }
 
-        <body>
+    function makeLauncherPage() {
+      const safeGames = JSON.stringify(GAMES).replace(/</g, "\\u003c");
 
-          <iframe
-            src="https://www.crazygames.com/embed/ragdoll-archers"
-            allow="gamepad *;">
-          </iframe>
+      return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Launcher</title>
 
-        </body>
-        </html>
-      `);
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      font-family: Arial, sans-serif;
+    }
 
-      win.document.close();
+    #toolbar {
+      position: fixed;
+      z-index: 1000;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border-radius: 10px;
+      background: rgba(20, 20, 20, 0.88);
+      backdrop-filter: blur(6px);
+    }
+
+    .game-button {
+      margin: 0;
+      padding: 8px 12px;
+      color: white;
+      background: #303030;
+      border: 1px solid #555;
+      border-radius: 6px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .game-button:hover,
+    .game-button.active {
+      background: #5865f2;
+      border-color: #7c86ff;
+    }
+
+    #frames {
+      width: 100%;
+      height: 100%;
+    }
+
+    .game-frame {
+      display: none;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+    }
+
+    .game-frame.active {
+      display: block;
+    }
+
+    #loading {
+      position: fixed;
+      z-index: 999;
+      right: 12px;
+      bottom: 12px;
+      padding: 8px 10px;
+      color: white;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toolbar"></div>
+
+  <div id="frames"></div>
+
+  <div id="loading">
+    Loading games...
+  </div>
+
+  <script>
+    const games = ${safeGames};
+
+    const toolbar = document.getElementById("toolbar");
+    const frames = document.getElementById("frames");
+    const loadingText = document.getElementById("loading");
+
+    let loadedCount = 0;
+
+    /*
+      Each iframe is created once when the about:blank tab opens.
+      The game buttons do not change the iframe URLs, so switching
+      games does not intentionally reload the game iframe.
+    */
+    games.forEach(function (game, index) {
+      const button = document.createElement("button");
+      button.className = "game-button";
+      button.type = "button";
+      button.textContent = game.name;
+      button.dataset.index = index;
+
+      toolbar.appendChild(button);
+
+      const frame = document.createElement("iframe");
+      frame.className = "game-frame";
+      frame.id = "game-frame-" + index;
+      frame.title = game.name;
+
+      /*
+        This asks the browser to begin loading each iframe as the
+        launcher tab opens.
+      */
+      frame.loading = "eager";
+      frame.allow = "gamepad *; fullscreen";
+      frame.src = game.url;
+
+      frame.addEventListener("load", function () {
+        loadedCount++;
+
+        if (loadedCount >= games.length) {
+          loadingText.textContent = "Games loaded";
+
+          setTimeout(function () {
+            loadingText.style.display = "none";
+          }, 1200);
+        } else {
+          loadingText.textContent =
+            "Loading games... " + loadedCount + "/" + games.length;
+        }
+      });
+
+      frames.appendChild(frame);
+
+      button.addEventListener("click", function () {
+        showGame(index);
+      });
+    });
+
+    function showGame(index) {
+      document.querySelectorAll(".game-frame").forEach(function (frame) {
+        frame.classList.remove("active");
+      });
+
+      document.querySelectorAll(".game-button").forEach(function (button) {
+        button.classList.remove("active");
+      });
+
+      document
+        .getElementById("game-frame-" + index)
+        .classList.add("active");
+
+      document
+        .querySelector('.game-button[data-index="' + index + '"]')
+        .classList.add("active");
+    }
+
+    if (games.length > 0) {
+      showGame(0);
+    } else {
+      loadingText.textContent = "No games were added.";
+    }
+  <\/script>
+</body>
+</html>`;
     }
   </script>
-
 </body>
 </html>
-```
