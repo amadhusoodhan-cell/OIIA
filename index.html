@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Game Launcher</title>
 
   <style>
@@ -78,6 +79,10 @@
   <script>
     const PASSWORD = "OIIA_IS_GOD";
 
+    /*
+      All URLs are set only once when the launcher tab is opened.
+      The gd_sdk_referrer_url points to your GitHub Pages site.
+    */
     const GAMES = [
       {
         name: "Ragdoll Archers",
@@ -97,31 +102,31 @@
       },
       {
         name: "Moto X3M",
-        url: "https://motox3m2.io/"
+        url: "https://html5.gamedistribution.com/5b0abd4c0faa4f5eb190a9a16d5a1b4c/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
       },
       {
-        name: "Moto X3M 2",
-        url: "https://motox3m2.io/moto-x3m-2"
+        name: "Moto X3M 4: Winter",
+        url: "https://html5.gamedistribution.com/bcacf81441bd4c7799a622171116ea9d/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
       },
       {
-        name: "Moto X3M Spooky Land",
-        url: "https://motox3m2.io/moto-x3m-spooky-land"
+        name: "Moto X3M 5: Pool Party",
+        url: "https://html5.gamedistribution.com/f804d079d19f44d3b951ead4588e974a/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
       },
       {
-        name: "Moto X3M 4 Winter",
-        url: "https://motox3m2.io/moto-x3m-4-winter"
-      },
-      {
-        name: "Moto X3M Pool Party",
-        url: "https://motox3m2.io/moto-x3m-pool-party"
-      },
-      {
-        name: "Moto X3M 3",
-        url: "https://motox3m2.io/moto-x3m-3"
+        name: "Moto X3M 6: Spooky Land",
+        url: "https://html5.gamedistribution.com/b8a342904608470a9f3382337aca3558/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
       },
       {
         name: "Drift Boss",
         url: "https://motox3m2.io/drift-boss"
+      },
+      {
+        name: "Vex X3M",
+        url: "https://gamedistribution.com/games/vex-x3m/"
+      },
+      {
+        name: "Vex X3M 2",
+        url: "https://gamedistribution.com/games/vex-x3m-2/"
       }
     ];
 
@@ -168,6 +173,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Game Launcher</title>
 
   <style>
@@ -262,11 +268,6 @@
 
     let loadedCount = 0;
 
-    /*
-      Each iframe is created once when the about:blank tab opens.
-      The game buttons do not change the iframe URLs, so switching
-      games does not intentionally reload the game iframe.
-    */
     games.forEach(function (game, index) {
       const button = document.createElement("button");
       button.className = "game-button";
@@ -282,8 +283,7 @@
       frame.title = game.name;
 
       /*
-        This asks the browser to begin loading each iframe as the
-        launcher tab opens.
+        Sets each URL once. showGame() never changes frame.src.
       */
       frame.loading = "eager";
       frame.allow = "gamepad *; fullscreen";
