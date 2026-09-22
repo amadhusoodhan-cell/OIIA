@@ -79,10 +79,6 @@
   <script>
     const PASSWORD = "OIIA_IS_GOD";
 
-    /*
-      All URLs are set only once when the launcher tab is opened.
-      The gd_sdk_referrer_url points to your GitHub Pages site.
-    */
     const GAMES = [
       {
         name: "Ragdoll Archers",
@@ -101,32 +97,24 @@
         url: "https://unblocked-games.s3.amazonaws.com/agent-smith.html"
       },
       {
-        name: "Moto X3M",
-        url: "https://html5.gamedistribution.com/5b0abd4c0faa4f5eb190a9a16d5a1b4c/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
-      },
-      {
-        name: "Moto X3M 4: Winter",
-        url: "https://html5.gamedistribution.com/bcacf81441bd4c7799a622171116ea9d/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
-      },
-      {
-        name: "Moto X3M 5: Pool Party",
-        url: "https://html5.gamedistribution.com/f804d079d19f44d3b951ead4588e974a/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
-      },
-      {
-        name: "Moto X3M 6: Spooky Land",
-        url: "https://html5.gamedistribution.com/b8a342904608470a9f3382337aca3558/?gd_sdk_referrer_url=https%3A%2F%2Famadhusoodhan-cell.github.io%2FOIIA%2F"
-      },
-      {
         name: "Drift Boss",
         url: "https://motox3m2.io/drift-boss"
       },
       {
-        name: "Vex X3M",
-        url: "https://gamedistribution.com/games/vex-x3m/"
+        name: "Moto X3M Pool Party",
+        url: "https://unblocked-games.s3.amazonaws.com/moto-x3m-pool-party.html"
       },
       {
-        name: "Vex X3M 2",
-        url: "https://gamedistribution.com/games/vex-x3m-2/"
+        name: "Moto X3M Spooky Land",
+        url: "https://unblocked-games.s3.amazonaws.com/moto-x3m-spooky-land.html"
+      },
+      {
+        name: "Moto X3M Winter",
+        url: "https://unblocked-games.s3.amazonaws.com/moto-x3m-winter.html"
+      },
+      {
+        name: "Moto X3M",
+        url: "https://unblocked-games.s3.amazonaws.com/moto-x3m.html"
       }
     ];
 
@@ -268,6 +256,11 @@
 
     let loadedCount = 0;
 
+    /*
+      Each iframe is created once when the about:blank launcher opens.
+      Switching buttons does not change frame.src, so it does not
+      intentionally reload a game.
+    */
     games.forEach(function (game, index) {
       const button = document.createElement("button");
       button.className = "game-button";
@@ -282,9 +275,6 @@
       frame.id = "game-frame-" + index;
       frame.title = game.name;
 
-      /*
-        Sets each URL once. showGame() never changes frame.src.
-      */
       frame.loading = "eager";
       frame.allow = "gamepad *; fullscreen";
       frame.src = game.url;
